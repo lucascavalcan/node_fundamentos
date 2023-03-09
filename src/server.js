@@ -31,3 +31,11 @@ const server = http.createServer((req, res)=> {
 })
 
 server.listen(3333)
+
+// STREAMS --> ser possível obter/ler pequenas partes de uma coisa e já consegui trabalhar com os dados, mesmo antes de ler o arquivo por completo
+// ex: IPORTAÇÃO DE CLIENTES VIA CSV (EXCEL) --> se subir um arquivo muito grande no sistema (através de uma rota POST por ex), caso não esteja usando stream, vai ter que ler o arquivo inteiro para depois dar alguma resposta (o que ia demorar muito)
+// READABLE STREAMS (streams de leitura) e WRITABLE STREAMS (streams de escrita) - um é para ler o outro é para enviar
+// req e res são stream (posso deixar uma req aberta e ir enviando dados aos poucos) (bem como posso recebr a resposta da requisição aos poucos)
+// stdin --> tudo que o usuário digita no terminal
+// stdout --> retorno da aplicação no terminal
+// pipe() --> serve para encaminhar algo
