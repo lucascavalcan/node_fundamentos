@@ -1,4 +1,5 @@
 import http from 'node:http'
+import { Database } from './middlewares/database.js'
 import { json } from './middlewares/json.js'
 
 // STATEFUL --> tudo que for declarado na aplicação vai ficar salvo na memória (precisa da memória para que a aplicação continue funcionando)
@@ -7,7 +8,7 @@ import { json } from './middlewares/json.js'
 // Headers/cabeçalhos --> (metadados) - informações adicioanis que o backend e o frontend saiba lidar com aquela resposta (não são o dado em si)
 // eu posso tanto obter os headers da resposta da requisição, como também enviar headers na requisição
 
-const users = [];
+const database = new Database
 
 const server = http.createServer(async (req, res)=> {
     const { method, url } = req
@@ -15,18 +16,21 @@ const server = http.createServer(async (req, res)=> {
     await json(req, res) // chamar a função json(dentro de middlewares) - passando req e res como parâmetros
 
     if (method === "GET" && url === "/users") {
-        return res
-        .end(JSON.stringify(users))
+        const users = database.select('users') // vai buscar todos os usuários desse local
+
+        return res.end(JSON.stringify(users))
     }
     
     if (method === "POST" && url === "/users") {
         const {name, email} = req.body
         
-        users.push({
+        const user =  {
             id: 1,
             name,
             email,
-        })
+        }
+
+        database.insert('users', user) // o nome da tabela ('users') e a info que quer inserir (user)
         
         return res.writeHead(201).end()
     }
